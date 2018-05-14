@@ -102,21 +102,6 @@
 					<!--类型不是固定不变的  -->
 					<div class="col-sm-9">
 						<select id="bookType" name="t_id" class="form-control">
-							<!--  <option value="1">编程</option>
-					   <option value="2">体育</option>
-					   <option value="3">管理</option> -->
-							<%List<bookType> types=(List<bookType>)request.getAttribute("typeList");
-					   for(bookType type:types)
-					   {%>
-
-							<option value="<%=type.getId() %>"><%=type.getBookType() %>
-							</option>
-
-
-							<%}
-					   %>
-
-
 
 						</select>
 
@@ -205,20 +190,30 @@
 
 					$('#bookDate').datepicker({
 						format : 'yyyy-mm-dd',
-						language : 'zh-CN',  //提示中文界面
-						autoclose : true  //自动关闭
+						language : 'zh-CN', //提示中文界面
+						autoclose : true
+					//自动关闭
 					});
-
-
-
-					
 
 				});
 			</script>
 
 
+			<script type="text/javascript">
+				function fillType() {
 
+					var selectList = document.getElementById("bookType");
+					for (var i = 0; i < types.length; i++) {
 
+						selectList.appendChild(new Option(types[i].bookType,   /* 名字和selectypeSeverlet中的types中的保证 一致  */
+								types[i].id));
+
+					}
+
+				}
+			</script>
+			<!-- onload：表示JavaScript加载完毕，然后再去找var types这样才能找到 -->
+			<script type="text/javascript" src="selectType" onload="fillType();"></script>
 
 		</div>
 

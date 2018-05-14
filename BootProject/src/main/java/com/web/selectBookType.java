@@ -25,8 +25,24 @@ public class selectBookType extends HttpServlet {
 	
 		selectBookService service=new selectBookServiceImpl();
 		List<bookType> typeList=service.selectType();
-		req.setAttribute("typeList",typeList);
-		req.getRequestDispatcher("addBook.jsp").forward(req, resp);
+		
+		resp.setContentType("text/javascript;charset=utf-8");
+		
+		String js="var types=[";
+		for (int i = 0; i <typeList.size();i++) {
+
+			js+="{id:"+typeList.get(i).getId()+",bookType:'"+typeList.get(i).getBookType()+"'}";
+			if(i<typeList.size()-1)
+			{
+				js+=",";
+				
+			}
+		}
+		js+="]";
+		resp.getWriter().write(js);//把j从传过去
+		
+		
+		
 	
 	
 	}
