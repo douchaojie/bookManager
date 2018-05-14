@@ -1,11 +1,12 @@
 package com.service.impl;
 
+
 import com.dao.insertBookDao;
 import com.dao.impl.insertBookDaoimpl;
 import com.domain.book;
-import com.service.bookService;
+import com.service.addBookService;
 
-public class bookServiceImpl implements bookService {
+public class addBookServiceImpl implements addBookService {
 
 	@Override
 	public int insertBook(book bookBean) {
@@ -13,5 +14,8 @@ public class bookServiceImpl implements bookService {
 		int res=dao.insertBook(bookBean);
 		return res;
 	}
+
+
+	
 
 }

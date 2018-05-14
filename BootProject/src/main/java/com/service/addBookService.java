@@ -1,9 +1,12 @@
 package com.service;
 
+
 import com.domain.book;
 
-public interface bookService {
+public interface addBookService {
 
 	int insertBook(book bookBean);
+
+
 
 }

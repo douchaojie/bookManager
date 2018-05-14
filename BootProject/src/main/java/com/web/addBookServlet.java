@@ -1,10 +1,6 @@
 package com.web;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -14,12 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-
-import org.apache.commons.beanutils.BeanUtils;
-
 import com.domain.book;
-import com.service.bookService;
-import com.service.impl.bookServiceImpl;
+import com.service.addBookService;
+import com.service.impl.addBookServiceImpl;
 import com.utils.MyBeanUtils;
 
 /**
@@ -78,7 +71,7 @@ public class addBookServlet extends HttpServlet {
 		}*/
     bookBean.setT_photo(newFileName); // 修改文件
 	  
-	 bookService service=new bookServiceImpl(); 
+	 addBookService service=new addBookServiceImpl(); 
 	  int ret=service.insertBook(bookBean);
 	  response.setContentType("text/html;charset=utf-8");
 	  if(ret>0) {   // 插入成功

@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+	pageEncoding="utf-8"%>
+<!--别忘了导包  -->
+<%@page import="java.util.*"%>
+<%@page import="com.domain.bookType"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -51,7 +54,8 @@
 						<label for="bookName">书名：</label>
 					</div>
 					<div class="col-sm-9">
-						<input type="text" class="form-control" id="bookName" name="t_name">
+						<input type="text" class="form-control" id="bookName"
+							name="t_name">
 					</div>
 				</div>
 
@@ -95,16 +99,29 @@
 					<div class="col-sm-3">
 						<label for="bookType">类型：</label>
 					</div>
+					<!--类型不是固定不变的  -->
 					<div class="col-sm-9">
-					   <select id="bookType" name="t_id" class="form-control" >
-					   <option value="1">编程</option>
+						<select id="bookType" name="t_id" class="form-control">
+							<!--  <option value="1">编程</option>
 					   <option value="2">体育</option>
-					   <option value="3">管理</option>
-					   
-					   </select>
-					
-					
-						
+					   <option value="3">管理</option> -->
+							<%List<bookType> types=(List<bookType>)request.getAttribute("typeList");
+					   for(bookType type:types)
+					   {%>
+
+							<option value="<%=type.getId() %>"><%=type.getBookType() %>
+							</option>
+
+
+							<%}
+					   %>
+
+
+
+						</select>
+
+
+
 					</div>
 
 				</div>
@@ -150,8 +167,7 @@
 				<div class="form-group">
 
 					<div class="col-sm-offset-2 col-sm-5">
-					<input type="submit" class="form-control"
-							value="添加">
+						<input type="submit" class="form-control" value="添加">
 					</div>
 				</div>
 
