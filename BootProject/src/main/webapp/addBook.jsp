@@ -200,7 +200,7 @@
 
 
 			<script type="text/javascript">
-				function fillType() {
+				function fillType(types) {    /* 别忘了传值  */
 
 					var selectList = document.getElementById("bookType");
 					for (var i = 0; i < types.length; i++) {
@@ -212,8 +212,9 @@
 
 				}
 			</script>
-			<!-- onload：表示JavaScript加载完毕，然后再去找var types这样才能找到 -->
-			<script type="text/javascript" src="selectType" onload="fillType();"></script>
+			<!-- iframe处于安全考虑不允许执行JavaScript -->
+        <iframe src="selectType" style="display: none"></iframe>
+
 
 		</div>
 

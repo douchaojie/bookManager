@@ -45,10 +45,10 @@ public class addBookServlet extends HttpServlet {
 	  String tid = request.getParameter("tid");
 	  String photo = request.getParameter("photo");*/
 	  String pubdate = request.getParameter("t_date");
-	  String vcode = request.getParameter("vcode");
+	  String vcode = request.getParameter("vcode");// 前端
       
 	  // 先判断验证码
-	  String Vcode = (String) request.getSession().getAttribute("validateCode");
+	  String Vcode = (String) request.getSession().getAttribute("validateCode");// 
 	  if(!Vcode.equalsIgnoreCase(vcode))
 	  {
 		  request.getRequestDispatcher("addBook.jsp").forward(request, response);;

@@ -26,9 +26,9 @@ public class selectBookType extends HttpServlet {
 		selectBookService service=new selectBookServiceImpl();
 		List<bookType> typeList=service.selectType();
 		
-		resp.setContentType("text/javascript;charset=utf-8");
-		
-		String js="var types=[";
+		resp.setContentType("text/html;charset=utf-8");// html
+		resp.getWriter().write("<script>");  //转化为script
+		String js="[";
 		for (int i = 0; i <typeList.size();i++) {
 
 			js+="{id:"+typeList.get(i).getId()+",bookType:'"+typeList.get(i).getBookType()+"'}";
@@ -39,8 +39,9 @@ public class selectBookType extends HttpServlet {
 			}
 		}
 		js+="]";
-		resp.getWriter().write(js);//把j从传过去
+		resp.getWriter().write("window.parent.fillType("+js+");");//把j从传过去
 		
+		resp.getWriter().write("</script>");
 		
 		
 	
