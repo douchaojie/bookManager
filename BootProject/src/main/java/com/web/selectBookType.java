@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.domain.bookType;
-import com.service.selectBookService;
-import com.service.impl.selectBookServiceImpl;
+import com.service.BookTypeService;
+import com.service.impl.BookTypeServiceImpl;
 
 /**
  * Servlet implementation class selectBookType
@@ -23,7 +23,7 @@ public class selectBookType extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	
-		selectBookService service=new selectBookServiceImpl();
+		BookTypeService service=new BookTypeServiceImpl();
 		List<bookType> typeList=service.selectType();
 		
 		resp.setContentType("text/html;charset=utf-8");// html

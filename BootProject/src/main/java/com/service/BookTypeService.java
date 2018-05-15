@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.domain.bookType;
 
-public interface selectBookService {
+public interface BookTypeService {
 
 	List<bookType> selectType();
 

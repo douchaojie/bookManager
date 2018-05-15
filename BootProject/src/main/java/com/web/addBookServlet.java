@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import com.domain.book;
-import com.service.addBookService;
-import com.service.impl.addBookServiceImpl;
+import com.service.BookService;
+import com.service.impl.BookServiceImpl;
 import com.utils.MyBeanUtils;
 
 /**
@@ -71,7 +71,7 @@ public class addBookServlet extends HttpServlet {
 		}*/
     bookBean.setT_photo(newFileName); // 修改文件
 	  
-	 addBookService service=new addBookServiceImpl(); 
+	 BookService service=new BookServiceImpl(); 
 	  int ret=service.insertBook(bookBean);
 	  response.setContentType("text/html;charset=utf-8");
 	  if(ret>0) {   // 插入成功

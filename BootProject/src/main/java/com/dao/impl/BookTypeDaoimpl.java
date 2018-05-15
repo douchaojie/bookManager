@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dao.selectBookTypeDao;
+import com.dao.BookTypeDao;
 import com.domain.bookType;
 import com.utils.connectUtils;
 
-public class selectBookTypeDaoimpl implements selectBookTypeDao {
+public class BookTypeDaoimpl implements BookTypeDao {
 
 	@Override
 	public List<bookType> selectTypeList() {
