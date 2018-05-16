@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dao.BookDao;
+import com.domain.BookList;
 import com.domain.book;
 import com.utils.connectUtils;
 import com.utils.pageSize;
@@ -45,11 +46,11 @@ public class BookDaoimpl implements BookDao {
 	}
 
 	@Override
-	public List<book> selectBookByPage(int pageNo) {
+	public List<BookList> selectBookByPage(int pageNo) {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet res = null;
-		List<book> list = new ArrayList<>();
+		List<BookList> list = new ArrayList<>();
 		try {
 			conn = connectUtils.getConnection();
 			String sql = "select * from book where id limit ?,?";// 索引从零开始的(id 别忘了)
@@ -64,9 +65,10 @@ public class BookDaoimpl implements BookDao {
 			pre.setInt(2, pageSize.pageSizeCount);
 			res = pre.executeQuery();
 			while (res.next()) {
-				book b = new book();
+				BookList b = new BookList();
 				b.setDescri(res.getString("descri"));
 				b.setId(res.getInt("id"));
+				b.setBookType(selectBookTypeBytid(res.getInt("t_id")));// 找到类型名称将其封装在新类中
 				b.setT_author(res.getString("t_author"));
 				b.setT_date(res.getDate("t_date"));
 				b.setT_id(res.getInt("t_id"));
@@ -110,4 +112,33 @@ public class BookDaoimpl implements BookDao {
 		return count;
 	}
 
+
+
+public String selectBookTypeBytid(int tid) {  // 根据书籍的类型标号寻找书籍类型名称
+	
+	Connection conn = null;
+	PreparedStatement pre = null;
+	ResultSet res = null;
+    String type=null;
+	try {
+		conn = connectUtils.getConnection();
+		String sql = "select bookType from bookType where id=?";
+		pre = conn.prepareStatement(sql);
+		pre.setInt(1,tid);
+		res = pre.executeQuery();
+		while (res.next()) {
+	    type=res.getString(1);
+			
+		}
+
+	} catch (SQLException e) {
+		e.printStackTrace();
+	} finally {
+		connectUtils.free(res, pre, conn);
+	}
+	
+	return type;
 }
+
+}
+

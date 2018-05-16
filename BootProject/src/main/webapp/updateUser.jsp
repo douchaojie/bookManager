@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ page import="com.domain.*" %>	
 <!DOCTYPE>
 <html>
 <head>
@@ -32,7 +33,7 @@
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	height: 300px;
+	height: 320px;
 	width: 400px;
 	margin-left: -150px
 }
@@ -50,15 +51,16 @@
 			<%} %>
 
 
-			<form action="loginServlet" method="post">
+			<form action="updateUser" method="post">
 
 				<div class="form-group">
 					<div class="col-sm-3">
 						<label for="exampleInputEmail1">用户：</label>
 					</div>
 					<div class="col-sm-9">
+					<!--只能读不能修改  -->
 						<input type="text" class="form-control" id="exampleInputEmail1"
-							name="name" value="<%=request.getAttribute("loginResult")==null?"":request.getAttribute("loginResult") %>">
+							name="name" value="<%=((admin)request.getSession().getAttribute("loginUser")).getName()%>" readonly="readonly">
 					</div>
 				</div>
 
@@ -73,7 +75,17 @@
 					</div>
 
 				</div>
-				
+				  <br/><br/>
+				<div class="form-group">
+					<div class="col-sm-3">
+						<label for="exampleInputPassword2">确认密码：</label>
+					</div>
+					<div class="col-sm-9">
+						<input type="password" class="form-control" name="password2"
+							id="exampleInputPassword2">
+					</div>
+
+				</div>
                <br/><br/>
 				<div class="form-group">
 					<div class="col-sm-3">
@@ -96,7 +108,7 @@
 
 					<div class="col-sm-offset-2 col-sm-5">
 						<br /> <br /> <input type="submit" class="form-control"
-							value="登陆">
+							value="确定">
 					</div>
 				</div>
 

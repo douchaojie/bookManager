@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.dao.BookDao;
 import com.dao.impl.BookDaoimpl;
+import com.domain.BookList;
 import com.domain.book;
 import com.service.BookService;
 
@@ -18,7 +19,7 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<book> findBookByPage(int pageNo) {// 按当前页查找当前页的书籍
+	public List<BookList> findBookByPage(int pageNo) {// 按当前页查找当前页的书籍
 
 		BookDao dao=new BookDaoimpl();
 	

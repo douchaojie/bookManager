@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ page import="java.util.*"%>>
-<%@ page import="com.domain.book"%>>
+<%@ page import="java.util.*"%>
+<%@ page import="com.domain.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,13 +42,13 @@
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown">书籍管理<strong class="caret"></strong></a>
 								<ul class="dropdown-menu">
-									<li><a href="#">查看</a></li>
-									<li><a href="bookAdd.jsp">添加</a></li>
+									<li><a href="#">删除</a></li>
+									<li><a href="addBook.jsp">添加</a></li>
 								</ul></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
-							<li><a href="#">修改密码</a></li>
-							<li><a href="#">登陆</a></li>
+							<li><a href="updateUser.jsp">修改密码</a></li>
+							<li><a href="logout">注销</a></li>
 						</ul>
 					</div>
 
@@ -73,14 +73,14 @@
 					</thead>
 
 					<%
-						List<book> lists = (List<book>) request.getAttribute("bookList");
-						for (book list : lists) {
+						List<BookList> lists = (List<BookList>) request.getAttribute("bookList");
+						for (BookList list : lists) {
 					%>
 					<tr>
 						<td><%=list.getId()%></td>
 						<td><%=list.getT_name()%></td>
 						<td><%=list.getDescri()%></td>
-						<td id="booktid"><%=list.getT_id()%></td>
+						<td ><%=list.getBookType()%></td>   <!--由tid更换为类型名字  -->
 						<td><img src="upload/<%=list.getT_photo()%>"
 							style="width: 150px; height: 150px;"></td>
 						<td><%=list.getT_price()%></td>
@@ -212,12 +212,6 @@
       
 </script>
 
-<script type="text/javascript">
-
-$();
-
-
-</script> 
 
 </body>
 </html>

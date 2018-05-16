@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.domain.BookList;
 import com.domain.book;
 import com.domain.bookType;
 import com.service.BookService;
@@ -34,9 +35,7 @@ public class bookListServlet extends HttpServlet {
 			pageNo = Integer.parseInt(pageStr);
 		}
 		BookService service = new BookServiceImpl();
-		List<book> bookList = service.findBookByPage(pageNo);
-		
-		
+		List<BookList> bookList = service.findBookByPage(pageNo);
 		
 		int totalCount = service.findBookCount();
 		// 根据总条数计算总页数

@@ -75,8 +75,7 @@ public class addBookServlet extends HttpServlet {
 	  int ret=service.insertBook(bookBean);
 	  response.setContentType("text/html;charset=utf-8");
 	  if(ret>0) {   // 插入成功
-		response.getWriter().write("添加成功");
-		  
+		response.sendRedirect("bookList");// 书籍列表
 		  
 	  }else {     // 插入失败
 		  
