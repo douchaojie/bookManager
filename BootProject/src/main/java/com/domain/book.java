@@ -76,6 +76,11 @@ public class book implements Serializable {
 	public void setDescri(String descri) {
 		this.descri = descri;
 	}
+	@Override
+	public String toString() {
+		return "book [id=" + id + ", t_name=" + t_name + ", t_price=" + t_price + ", t_photo=" + t_photo + ", t_date="
+				+ t_date + ", t_author=" + t_author + ", t_id=" + t_id + ", descri=" + descri + "]";
+	}
 	
 	
 	

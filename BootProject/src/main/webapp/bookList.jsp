@@ -69,6 +69,7 @@
 							<th>价格</th>
 							<th>作者</th>
 							<th>出版日期</th>
+							<th>操作</th>
 						</tr>
 					</thead>
 
@@ -80,12 +81,17 @@
 						<td><%=list.getId()%></td>
 						<td><%=list.getT_name()%></td>
 						<td><%=list.getDescri()%></td>
-						<td ><%=list.getBookType()%></td>   <!--由tid更换为类型名字  -->
+						<td><%=list.getBookType()%></td>
+						<!--由tid更换为类型名字  -->
 						<td><img src="upload/<%=list.getT_photo()%>"
 							style="width: 150px; height: 150px;"></td>
 						<td><%=list.getT_price()%></td>
 						<td><%=list.getT_author()%></td>
 						<td><%=list.getT_date()%></td>
+						<td><a href="editBook?id=<%=list.getId()%>" class="glyphicon glyphicon-pencil">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="deleteBook?id=<%=list.getId()%>"
+							class="glyphicon glyphicon-remove" onclick="delBook(event);">删除</a></td>
+
 					</tr>
 					<%
 						}
@@ -94,100 +100,108 @@
 					<!-- 向前翻页 -->
 
 					<tr>
-						<td colspan="8" style="padding-top: 0px; padding-bottom: 0px;"
+						<td colspan="9" style="padding-top: 0px; padding-bottom: 0px;"
 							class="text-center">
 
 							<ul class="pagination" style="margin: 0px;">
 								<!-- 向前翻页 -->
 
 								<%
-							int pageNo=(Integer)request.getAttribute("pageNo");   /*括号里面必须是包装类   */
-							
-							if(pageNo==1){
-							%>
+									int pageNo = (Integer) request.getAttribute("pageNo"); /*括号里面必须是包装类   */
+
+									if (pageNo == 1) {
+								%>
 								<li class="disabled"><a href="#">&lt;&lt;</a></li>
 
-								<%}else{
-							%>
-								<li><a href="bookList?pageNo=<%=pageNo-1%>">&lt;&lt;</a></li>
+								<%
+									} else {
+								%>
+								<li><a href="bookList?pageNo=<%=pageNo - 1%>">&lt;&lt;</a></li>
 
 
-								<%}
-							%>
+								<%
+									}
+								%>
 
 
 								<!--显示总页数  -->
+								<!-- 对于我们这里最多显示五个超级链接，实现算法如下：
+					     1. 如果totalPage<=5,我们显⽰所有超级
+                         2. 否则如果pageNum<=3 ,显⽰1 2 3 4 ...totalPage这五个超级链接
+                         3. 否则如果pageNum>=totalPage-3,显⽰1... totalPage-3 totalPage-2 totalPage-1 totalPage这五个链接
+                         4. 否则显示：1... pageNum-1 pageNum pageNum+1 ...totalPage这五个 -->
+
+
 								<%
 									int totalpage = (Integer) request.getAttribute("totalPage");
-									for (int i = 1; i <= totalpage; i++) {
+									/*   1. 如果totalPage<=5,我们显⽰所有超级*/
+									if (totalpage <= 5) {
+										for (int i = 1; i <= totalpage; i++) {
 								%>
 
 								<li><a href="bookList?pageNo=<%=i%>"><%=i%></a></li>
 
 								<%
 									}
-								%> 
-								
-							<%-- 	<%
-									 
-									   int totalPage=(Integer)request.getAttribute("totalPage");
-									    if(totalPage<=5) {
-									    	for(int i=1;i<=totalPage;i++)
-									    	{
-									    		%>
-									<li><a href="bookList?pageNo=<%=i%>"><%=i%></a></li>
-									<%
-									    	}
-									    }else if(pageNo<=3){
-									    	
-									    	%>
+									} else {
+										/* 2. 否则如果pageNum<=3 ,显⽰1 2 3 4 ...totalPage这五个超级链接 */
+										if (pageNo <= 3) {
+								%>
+								<li><a href="bookList?pageNo=1">1</a></li>
+								<li><a href="bookList?pageNo=2">2</a></li>
+								<li><a href="bookList?pageNo=3">3</a></li>
+								<li><a href="bookList?pageNo=4">4</a></li>
+								<li><a href="bookList?pageNo=<%=totalpage%>">...<%=totalpage%></a></li>
+								<%
+									}
+										/*  3. 否则如果pageNum>=totalPage-3,显⽰1... totalPage-3 totalPage-2 totalPage-1 totalPage这五个链接 */
+										else if (pageNo >= totalpage - 3) {
+								%>
 
-									<li><a href="bookList?pageNo=1">1</a></li>
-									<li><a href="bookList?pageNo=2">2</a></li>
-									<li><a href="bookList?pageNo=3">3</a></li>
-									<li><a href="bookList?pageNo=4">4</a></li>
-									<li><a href="bookList?pageNo=<%=totalPage%>">..<%=totalPage%></a></li>
-									<% 
-									    } else if(pageNo>=totalPage-2){
-									    	
-									    	%>
-									    	<li><a href="bookList?pageNo=1">1..</a></li>
-									<li><a href="bookList?pageNo=<%=totalPage-3%>"><%=totalPage-3%></a></li>
-									<li><a href="bookList?pageNo=<%=totalPage-2%>"><%=totalPage-2%></a></li>
-									<li><a href="bookList?pageNo=<%=totalPage-1%>"><%=totalPage-1%></a></li>
-									<li><a href="bookList?pageNo=<%=totalPage%>"><%=totalPage%></a></li>
-									    	
-									    	<% 
-									    }else{
-									    	
-									    	%>
-									   	    	<li><a href="bookList?pageNo=1">1..</a></li>
-									<li><a href="bookList?pageNo=<%=pageNo-1%>"><%=pageNo-1%></a></li>
-									<li><a href="bookList?pageNo=<%=pageNo%>"><%=pageNo%></a></li>
-									<li><a href="bookList?pageNo=<%=pageNo+1%>"><%=pageNo+1%></a></li>
-									<li><a href="bookList?pageNo=<%=totalPage%>">..<%=totalPage%></a></li> 	
-									    	
-									    	<% 
-									    }
-									  %>
-								
-								 --%>
-								
-								
+								<li><a href="bookList?pageNo=1">1...</a></li>
+								<li><a href="bookList?pageNo=<%=totalpage - 3%>"><%=totalpage - 3%></a></li>
+								<li><a href="bookList?pageNo=<%=totalpage - 2%>"><%=totalpage - 2%></a></li>
+								<li><a href="bookList?pageNo=<%=totalpage - 1%>"><%=totalpage - 1%></a></li>
+								<li><a href="bookList?pageNo=<%=totalpage%>"><%=totalpage%></a></li>
+
+
+								<%
+									} else {
+											/* 4. 否则显示：1... pageNum-1 pageNum pageNum+1 ...totalPage这五个   */
+								%>
+
+								<li><a href="bookList?pageNo=1">1...</a></li>
+								<li><a href="bookList?pageNo=<%=pageNo - 1%>"><%=pageNo - 1%></a></li>
+								<li><a href="bookList?pageNo=<%=pageNo%>"><%=pageNo%></a></li>
+								<li><a href="bookList?pageNo=<%=totalpage + 1%>"><%=totalpage + 1%></a></li>
+								<li><a href="bookList?pageNo=<%=totalpage%>">...<%=totalpage%></a></li>
+
+
+
+
+								<%
+									}
+
+									}
+								%>
+
+
+
 								<!-- 向后翻页 -->
 								<%
-						
-							if(pageNo==totalpage){
-							%>
+									if (pageNo == totalpage) {
+								%>
 								<li class="disabled"><a href="#">&gt;&gt;</a></li>
 
-								<%}else{
-							%>
-								<li><a href="bookList?pageNo=<%=pageNo+1%>">&gt;&gt;</a></li>
+								<%
+									} else {
+								%>
+								<li><a href="bookList?pageNo=<%=pageNo + 1%>">&gt;&gt;</a></li>
 
 
-								<%}
-							%>
+								<%
+									}
+								%>
 							</ul>
 						</td>
 					</tr>
@@ -206,11 +220,47 @@
 	</div>
 
 <script type="text/javascript">   /* 点到哪页哪页下面的 样式改变 */
-      $(function(){
-              $("a[ href='bookList?pageNo=<%=pageNo%>']").parent("li").addClass("active");
-          });
-      
+
+    $(function(){
+            $("a[ href^='bookList?pageNo=<%=pageNo%>']").parent("li").addClass("active");
+        });
+
 </script>
+	<script type="text/javascript">
+		/* $(function() {
+
+			$("a[href='deleteBook?id='] [class='glyphicon glyphicon-remove']")
+					.click(function(e) {
+
+						if (!confirm("你确定要删除吗？ ")) {
+							//取消超级链接默认⾏为  
+							e.preventDefault();
+
+						}
+
+					});
+
+		}); */
+/* 是否要删除   */
+function delBook(event){
+
+if(!confirm(" 你确定要删除吗？"))
+{
+	//取消超级链接默认⾏为  
+
+	event.preventDefault();
+}
+
+					
+}
+		
+	</script>
+	
+	
+	
+	
+
+
 
 
 </body>

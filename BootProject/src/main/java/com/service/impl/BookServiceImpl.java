@@ -32,6 +32,25 @@ public class BookServiceImpl implements BookService {
 		return dao.selectTotalCount();
 	}
 
+	@Override
+	public int deleteBookById(int id) {
+		BookDao dao=new BookDaoimpl();
+		return dao.deleteBookById(id);
+	}
+
+	@Override
+	public book selectBookById(int id) {
+		BookDao dao=new BookDaoimpl();
+		return dao.selectBookById(id);
+		}
+
+	@Override
+	public int updateBook(book bookBean) {
+		BookDao dao=new BookDaoimpl();
+		int res=dao.updateBook(bookBean);
+		return res;
+	}
+
 
 	
 

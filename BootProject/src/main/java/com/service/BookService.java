@@ -15,5 +15,12 @@ public interface BookService {
 	int findBookCount();
 
 
+	int deleteBookById(int id);
+
+	book selectBookById(int id);
+
+	int updateBook(book bookBean);
+
+
 
 }

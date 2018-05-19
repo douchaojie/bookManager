@@ -14,6 +14,15 @@ public interface BookDao {
 
 	int selectTotalCount();
 
+	int deleteBookById(int id);
+
+	book selectBookById(int id);
+
+	int updateBook(book bookBean);
+
+
+	
+
 
 
 	
