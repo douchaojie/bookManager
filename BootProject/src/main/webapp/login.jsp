@@ -5,12 +5,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<!-- 1、告诉浏览器表缩放 -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!--普通 css -->
-<link href="bower_components/bootstrap/dist/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" />
+<!-- 提取的公共头部代码-->
+<%
+out.flush();  /* 先进行发送缓存----避免代码位置不对  */
+request.getRequestDispatcher("top.jsp").include(request, response); %>
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script type="text/javascript"
 	src="bower_components/jquery/dist/jquery.min.js"></script>

@@ -5,12 +5,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- 1、告诉浏览器表缩放 -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<!--普通 css -->
-<link href="bower_components/bootstrap/dist/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" />
+<!-- 提取的公共头部代码-->
+<%
+out.flush();  /* 先进行发送缓存----避免代码位置不对  */
+request.getRequestDispatcher("top.jsp").include(request, response); %>
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script type="text/javascript"
 	src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -60,6 +60,27 @@
 
 				<table class="table table-hover table-condensed   table-bordered">
 					<thead>
+						<!--搜索框  -->
+						<tr>
+						<td colspan="9">
+						<form class="form-inline" action="bookList" method="post">
+							<div class="form-group" class="col-md-3">
+								<label for="exampleInputName2">书名</label> <input type="text"
+									class="form-control" id="exampleInputName2" name="name"
+								value="<%=request.getAttribute("name")==null?"":request.getAttribute("name") %>"	>
+							</div>
+							<div class="form-group">
+								<label for="exampleInputEmail2">类型</label> <input
+									type="email" class="form-control" id="exampleInputEmail2" name="type">
+							</div>
+							<button type="submit" class="btn btn-default">搜索</button>
+						</form>
+						
+						
+						
+						</td>
+						</tr>
+						
 						<tr>
 							<th>标号</th>
 							<th>书名</th>
@@ -88,7 +109,8 @@
 						<td><%=list.getT_price()%></td>
 						<td><%=list.getT_author()%></td>
 						<td><%=list.getT_date()%></td>
-						<td><a href="editBook?id=<%=list.getId()%>" class="glyphicon glyphicon-pencil">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+						<td><a href="editBook?id=<%=list.getId()%>"
+							class="glyphicon glyphicon-pencil">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
 							<a href="deleteBook?id=<%=list.getId()%>"
 							class="glyphicon glyphicon-remove" onclick="delBook(event);">删除</a></td>
 
@@ -211,21 +233,20 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12">
-				<h2></h2>
-				<p>&copy;南阳德刚版权所有</p>
-
-			</div>
+		<!-- 尾部提取代码 -->
+		<%
+		out.flush();    /* 先进行发送缓存----避免代码位置不对  */
+		request.getRequestDispatcher("bottom.jsp").include(request, response); %>	
 		</div>
 	</div>
 
-<script type="text/javascript">   /* 点到哪页哪页下面的 样式改变 */
+	<script type="text/javascript">   /* 点到哪页哪页下面的 样式改变 */
 
     $(function(){
-            $("a[ href^='bookList?pageNo=<%=pageNo%>']").parent("li").addClass("active");
-        });
-
-</script>
+            $("a[ href^='bookList?pageNo=<%=pageNo%>']").parent("li").addClass(
+					"active");
+		});
+	</script>
 	<script type="text/javascript">
 		/* $(function() {
 
@@ -241,24 +262,21 @@
 					});
 
 		}); */
-/* 是否要删除   */
-function delBook(event){
+		/* 是否要删除   */
+		function delBook(event) {
 
-if(!confirm(" 你确定要删除吗？"))
-{
-	//取消超级链接默认⾏为  
+			if (!confirm(" 你确定要删除吗？")) {
+				//取消超级链接默认⾏为  
 
-	event.preventDefault();
-}
+				event.preventDefault();
+			}
 
-					
-}
-		
+		}
 	</script>
-	
-	
-	
-	
+
+
+
+
 
 
 

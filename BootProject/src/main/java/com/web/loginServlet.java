@@ -62,7 +62,8 @@ public void doPost(HttpServletRequest request, HttpServletResponse response) thr
 	if(res)
 	{
 		//request.setAttribute("name",person.getName());
-		request.getSession().setAttribute("loginUser",person);
+		//session.setAttribute("loginUser",person);
+		session.setAttribute("loginMsg","1");
 		response.sendRedirect("bookList");// 重定向到书籍列表
 		
 		

@@ -8,17 +8,16 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<!-- 引入文件bootstrap 插件-->
-<!--普通 css -->
-<link href="bower_components/bootstrap/dist/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" />
+<!-- 提取的公共头部代码-->
+<%
+out.flush();  /* 先进行发送缓存----避免代码位置不对  */
+request.getRequestDispatcher("top.jsp").include(request, response); %>
 <!-- 时间css -->
 <link
 	href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css"
 	rel="stylesheet" type="text/css" />
 
-<!-- 必须引入 -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style type="text/css">
 .dv1 {
 	border: 2px solid black;

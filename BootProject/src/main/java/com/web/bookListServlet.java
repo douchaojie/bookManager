@@ -25,6 +25,7 @@ public class bookListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		String pageStr = req.getParameter("pageNo");
+		String name = req.getParameter("name");
 		int pageNo;
 		if (pageStr == null) {
 
