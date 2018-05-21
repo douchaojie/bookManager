@@ -58,9 +58,13 @@
 						<label for="exampleInputEmail1">用户：</label>
 					</div>
 					<div class="col-sm-9">
-					<!--只能读不能修改  -->
+
+
+
+
+
 						<input type="text" class="form-control" id="exampleInputEmail1"
-							name="name" value="<%=((admin)request.getSession().getAttribute("loginUser")).getName()%>" readonly="readonly">
+							name="name" value="<%=((admin)session.getAttribute("loginUser")).getName()%>" readonly="readonly">
 					</div>
 				</div>
 

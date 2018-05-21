@@ -10,9 +10,9 @@ public interface BookDao {
 
 	int insertBook(book bookBean);
 
-	List<BookList> selectBookByPage(int pageNo);
+	List<BookList> selectBookByPage(int pageNo, String name, int tid);
 
-	int selectTotalCount();
+	int selectTotalCount(String name, int tid);
 
 	int deleteBookById(int id);
 

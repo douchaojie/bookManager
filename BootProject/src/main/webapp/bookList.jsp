@@ -63,15 +63,42 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 						<!--搜索框  -->
 						<tr>
 						<td colspan="9">
-						<form class="form-inline" action="bookList" method="post">
+						<form class="form-inline" action="bookList" method="post" id="searchFrm">
 							<div class="form-group" class="col-md-3">
 								<label for="exampleInputName2">书名</label> <input type="text"
 									class="form-control" id="exampleInputName2" name="name"
 								value="<%=request.getAttribute("name")==null?"":request.getAttribute("name") %>"	>
 							</div>
 							<div class="form-group">
-								<label for="exampleInputEmail2">类型</label> <input
-									type="email" class="form-control" id="exampleInputEmail2" name="type">
+								
+								<label for="selectTid">类型</label> <select name="tid" id="selectTid" class="form-control">
+								
+								<option value="-1">-------请选择----</option>
+								
+								
+									<% List<bookType> typeLists=(List<bookType>)request.getAttribute("typeList");
+                         			  int tid=(Integer)request.getAttribute("tid");				
+								for(bookType type:typeLists)
+									{
+										
+										if(tid==type.getId())
+										{%>
+									<option value="<%=type.getId()%>" selected="selected"><%=type.getBookType() %></option>		
+											
+									<%}else{%>
+										
+									<option value="<%=type.getId()%>"><%=type.getBookType() %></option>		
+											
+										
+										
+									<%}
+									
+									}								
+									%>
+								</select>	
+									
+									
+									
 							</div>
 							<button type="submit" class="btn btn-default">搜索</button>
 						</form>
@@ -243,8 +270,18 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 	<script type="text/javascript">   /* 点到哪页哪页下面的 样式改变 */
 
     $(function(){
+           /* 改变 当前页样式  */
             $("a[ href^='bookList?pageNo=<%=pageNo%>']").parent("li").addClass(
 					"active");
+
+			/* 序列化表单  */
+            $(".pagination a[ href^='bookList?pageNo=']").click(function(e){
+
+                this.href+="&"+$("#searchFrm").serialize();
+
+
+                });
+			
 		});
 	</script>
 	<script type="text/javascript">

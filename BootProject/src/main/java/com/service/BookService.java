@@ -10,9 +10,9 @@ public interface BookService {
 
 	int insertBook(book bookBean);
 
-	List<BookList> findBookByPage(int pageNo);
+	List<BookList> findBookByPage(int pageNo, String name, int tid);
 
-	int findBookCount();
+	int findBookCount(String name, int tid);
 
 
 	int deleteBookById(int id);

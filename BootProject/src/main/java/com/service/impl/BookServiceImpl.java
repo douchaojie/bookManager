@@ -19,17 +19,17 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	public List<BookList> findBookByPage(int pageNo) {// 按当前页查找当前页的书籍
+	public List<BookList> findBookByPage(int pageNo, String name, int tid) {// 按当前页查找当前页的书籍
 
 		BookDao dao=new BookDaoimpl();
 	
-		return dao.selectBookByPage(pageNo);
+		return dao.selectBookByPage(pageNo,name,tid);
 	}
 
 	@Override
-	public int findBookCount() {    // 查找总条数
+	public int findBookCount(String name, int tid) {    // 查找总条数
 		BookDao dao=new BookDaoimpl();
-		return dao.selectTotalCount();
+		return dao.selectTotalCount(name,tid);
 	}
 
 	@Override

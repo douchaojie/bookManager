@@ -46,23 +46,40 @@ public class BookDaoimpl implements BookDao {
 	}
 
 	@Override
-	public List<BookList> selectBookByPage(int pageNo) {
+	public List<BookList> selectBookByPage(int pageNo, String name, int tid) {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet res = null;
 		List<BookList> list = new ArrayList<>();
 		try {
 			conn = connectUtils.getConnection();
-			String sql = "select * from book where id limit ?,?";// 索引从零开始的(id 别忘了)
-			pre = conn.prepareStatement(sql);
+			String sql = "select * from book where 2=2  ";// 索引从零开始的(id 别忘了)
+
+			/*
+			 * 书名框和类型框分四类情况讨论（1都没有值、2 name有tid没有 、3 name没有tid有、 4 name和tid都有）
+			 * 为了简写步骤，今天学习一个套路，可以简单的解决
+			 *
+			 */
+			if (name != null && !name.equals("")) {
+				sql += "and t_name like '%" + name + "%'";
+
+			}
+			if (tid != -1) {
+
+				sql += "and t_id=" + tid;
+			}
 
 			/*
 			 * 第一个？ 代表索引开始位置 ，第二个代表每页的条数 举例： //每页两条 0 1 // 索引首位置等于 ： 每页条数*（当前页-1） 2 3 4 5 6
 			 * 7
 			 */
 
-			pre.setInt(1, (pageNo - 1) * pageSize.pageSizeCount);
-			pre.setInt(2, pageSize.pageSizeCount);
+			sql += " limit " + ((pageNo - 1) * pageSize.pageSizeCount) + "," + pageSize.pageSizeCount;
+
+			pre = conn.prepareStatement(sql);
+
+			// pre.setInt(1, (pageNo - 1) * pageSize.pageSizeCount);
+			// pre.setInt(2, pageSize.pageSizeCount);
 			res = pre.executeQuery();
 			while (res.next()) {
 				BookList b = new BookList();
@@ -89,14 +106,24 @@ public class BookDaoimpl implements BookDao {
 	}
 
 	@Override
-	public int selectTotalCount() {
+	public int selectTotalCount(String name, int tid) {
 		Connection conn = null;
 		PreparedStatement pre = null;
 		ResultSet res = null;
 		int count = 0;
 		try {
 			conn = connectUtils.getConnection();
-			String sql = "select count(*) from book";
+			String sql = "select count(*) from book where 2=2  ";
+			if(name!=null&&!name.equals(""))
+			{
+				sql+="and t_name like '%"+name+"%'";
+				
+			}
+			if(tid!=-1)
+			{
+				sql+="and t_id="+tid;
+			}
+			
 			pre = conn.prepareStatement(sql);
 			res = pre.executeQuery();
 			while (res.next()) {
@@ -202,8 +229,8 @@ public class BookDaoimpl implements BookDao {
 		int executeUpdate = 0;
 		try {
 			conn = connectUtils.getConnection();
-			if(bookBean.getT_photo()!=null&&!bookBean.equals("")) {//判断是否上传图片
-				
+			if (bookBean.getT_photo() != null && !bookBean.equals("")) {// 判断是否上传图片
+
 				// 上传图片了，就设置photo
 				String sql = "update book set t_name=?,t_price=?,t_photo=?,t_date=?,t_author=?,t_id=?,descri=? where id=?";
 				pre = conn.prepareStatement(sql);
@@ -215,7 +242,7 @@ public class BookDaoimpl implements BookDao {
 				pre.setInt(6, bookBean.getT_id());
 				pre.setString(7, bookBean.getDescri());
 				pre.setInt(8, bookBean.getId());
-			}else {
+			} else {
 				// 没有上传就使用默认的，不用修改
 				String sql = "update book set t_name=?,t_price=?,t_date=?,t_author=?,t_id=?,descri=? where id=?";
 				pre = conn.prepareStatement(sql);
@@ -226,10 +253,8 @@ public class BookDaoimpl implements BookDao {
 				pre.setInt(5, bookBean.getT_id());
 				pre.setString(6, bookBean.getDescri());
 				pre.setInt(7, bookBean.getId());
-				
-				
+
 			}
-			
 
 			executeUpdate = pre.executeUpdate();
 
