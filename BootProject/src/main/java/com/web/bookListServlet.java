@@ -17,7 +17,10 @@ import com.service.BookTypeService;
 import com.service.impl.BookServiceImpl;
 import com.service.impl.BookTypeServiceImpl;
 import com.utils.pageSize;
-
+/*
+ * 
+ * 乱码问题已解决
+ */
 @WebServlet("/bookList")
 public class bookListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
