@@ -20,6 +20,13 @@ public class connectUtils {
 		
 	}
 	
+	public static void closePool() {
+		// 用完关闭连接池
+		pool.close();
+		
+	}
+	
+	
 	
 
 	public static void free(Connection conn, Statement statement) {
