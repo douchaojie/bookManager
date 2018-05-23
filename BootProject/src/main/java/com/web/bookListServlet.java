@@ -32,9 +32,12 @@ public class bookListServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=utf-8");
 		String pageStr = req.getParameter("pageNo");
 		String name = req.getParameter("name");
+		if(name!=null&&!name.equals(""))
+		{
 		//解决get请求中文乱码问题
 		 name = new String(name.getBytes("iso-8859-1"),"utf-8");//想用iso-8859-1编码再用utf-8解码
-		String tidStr = req.getParameter("tid");
+		}
+		 String tidStr = req.getParameter("tid");
 		
 		int pageNo;
 		if (pageStr == null) {

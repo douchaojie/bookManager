@@ -2,6 +2,10 @@
 	pageEncoding="utf-8"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.domain.*"%>
+<%  
+String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,9 +18,17 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script type="text/javascript"
 	src="bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- 定义主题css -->
+<link rel="stylesheet" id="themLink" type="text/css">
+
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script type="text/javascript"
 	src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!--导入session  -->
+<script type="text/javascript"
+	src="bower_components/bootstrap/dist/js/jquery.cookie.js"></script>
+
 <title>Insert title here</title>
 </head>
 <body>
@@ -47,6 +59,15 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 								</ul></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
+							<li><a href="#">主题&nbsp;&nbsp; <select id="selectTheme"
+									style="color: black;" >
+										<option>default</option>
+										<option>flatly</option>
+										<option>paper</option>
+										<option>darkly</option>
+
+								</select>
+							</a></li>
 							<li><a href="updateUser.jsp">修改密码</a></li>
 							<li><a href="logout">注销</a></li>
 						</ul>
@@ -62,52 +83,54 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 					<thead>
 						<!--搜索框  -->
 						<tr>
-						<td colspan="9">
-						<form class="form-inline" action="bookList" method="post" id="searchFrm">
-							<div class="form-group" class="col-md-3">
-								<label for="exampleInputName2">书名</label> <input type="text"
-									class="form-control" id="exampleInputName2" name="name"
-								value="<%=request.getAttribute("name")==null?"":request.getAttribute("name") %>"	>
-							</div>
-							<div class="form-group">
-								
-								<label for="selectTid">类型</label> <select name="tid" id="selectTid" class="form-control">
-								
-								<option value="-1">-------请选择----</option>
-								
-								
-									<% List<bookType> typeLists=(List<bookType>)request.getAttribute("typeList");
+							<td colspan="9">
+								<form class="form-inline" action="bookList" method="post"
+									id="searchFrm">
+									<div class="form-group" class="col-md-3">
+										<label for="exampleInputName2">书名</label> <input type="text"
+											class="form-control" id="exampleInputName2" name="name"
+											value="<%=request.getAttribute("name")==null?"":request.getAttribute("name") %>">
+									</div>
+									<div class="form-group">
+
+										<label for="selectTid">类型</label> <select name="tid"
+											id="selectTid" class="form-control">
+
+											<option value="-1">-------请选择----</option>
+
+
+											<% List<bookType> typeLists=(List<bookType>)request.getAttribute("typeList");
                          			  int tid=(Integer)request.getAttribute("tid");				
 								for(bookType type:typeLists)
 									{
 										
 										if(tid==type.getId())
 										{%>
-									<option value="<%=type.getId()%>" selected="selected"><%=type.getBookType() %></option>		
-											
-									<%}else{%>
-										
-									<option value="<%=type.getId()%>"><%=type.getBookType() %></option>		
-											
-										
-										
-									<%}
+											<option value="<%=type.getId()%>" selected="selected"><%=type.getBookType() %></option>
+
+											<%}else{%>
+
+											<option value="<%=type.getId()%>"><%=type.getBookType() %></option>
+
+
+
+											<%}
 									
 									}								
 									%>
-								</select>	
-									
-									
-									
-							</div>
-							<button type="submit" class="btn btn-default">搜索</button>
-						</form>
-						
-						
-						
-						</td>
+										</select>
+
+
+
+									</div>
+									<button type="submit" class="btn btn-default">搜索</button>
+								</form>
+
+
+
+							</td>
 						</tr>
-						
+
 						<tr>
 							<th>标号</th>
 							<th>书名</th>
@@ -131,7 +154,7 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 						<td><%=list.getDescri()%></td>
 						<td><%=list.getBookType()%></td>
 						<!--由tid更换为类型名字  -->
-						<td><img src="upload/<%=list.getT_photo()%>"
+						<td id="bookImg"><img src="upload/<%=list.getT_photo()%>"
 							style="width: 150px; height: 150px;"></td>
 						<td><%=list.getT_price()%></td>
 						<td><%=list.getT_author()%></td>
@@ -260,10 +283,10 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 			</div>
 		</div>
 		<div class="row">
-		<!-- 尾部提取代码 -->
-		<%
+			<!-- 尾部提取代码 -->
+			<%
 		out.flush();    /* 先进行发送缓存----避免代码位置不对  */
-		request.getRequestDispatcher("bottom.jsp").include(request, response); %>	
+		request.getRequestDispatcher("bottom.jsp").include(request, response); %>
 		</div>
 	</div>
 
@@ -271,8 +294,7 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 
     $(function(){
            /* 改变 当前页样式  */
-            $("a[ href^='bookList?pageNo=<%=pageNo%>']").parent("li").addClass(
-					"active");
+            $("a[ href^='bookList?pageNo=<%=pageNo%>'] ").parent("li").addClass("active");
 
 			/* 序列化表单  */
             $(".pagination a[ href^='bookList?pageNo=']").click(function(e){
@@ -281,9 +303,93 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 
 
                 });
+
+         
 			
 		});
 	</script>
+	<!--解决图片丢失问题，如果丢失添加一个默认图片  -->
+	<%-- <script type="text/javascript">
+	 $(function(){
+
+		   $("#bookImg img").error(function(){
+
+		    this.src="<%=basePath%>/upload/lost.jpg";
+			
+		  });
+
+		});
+
+
+	</script> --%>
+
+	<!-- 更换主题 -->
+
+	<script type="text/javascript">
+
+function readCookie(name){
+
+var cookieList=document.cookie.split(";");
+for (var i = 0; i < cookieList.length; i++) {
+if(name===cookieList[i].split("=")[0].replace(/(^\s*)|(\s*$)/g, ""))//---replace(/(^\s*)|(\s*$)/g, "")去掉name 前面的空格 
+{
+
+	return cookieList[i].split("=")[1];
+} 
+
+	
+}
+
+
+return null;	
+}
+
+
+
+
+$(function(){
+
+
+// 加载页面后先判断是否以前保存的有cookie
+if (readCookie("theme")) {  //根据有没有对象 jqery会根据使用情况转变（本例转变成true和false）
+
+$("#themLink").attr("href","bower_components/bootstrap/dist/css/"+readCookie("theme")+"/bootstrap.min.css");
+// 下拉列框内容改变 	
+$("#selectTheme").val(readCookie("theme"));
+	
+	
+} else {
+
+$("#themLink").attr("href","bower_components/bootstrap/dist/css/default/bootstrap.min.css");
+
+	
+}
+
+//--------改变主题时 保存cookie 
+
+$("#selectTheme").bind("change", function(e) {
+
+$("#themLink").attr("href","bower_components/bootstrap/dist/css/"+$("#selectTheme").val()+"/bootstrap.min.css");
+// 保存cookie 
+document.cookie="theme="+$("#selectTheme").val()+";max-age="+7*24*60*60;
+
+	
+});
+	
+});
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
 	<script type="text/javascript">
 		/* $(function() {
 
