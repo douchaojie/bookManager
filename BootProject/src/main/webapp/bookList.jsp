@@ -2,10 +2,15 @@
 	pageEncoding="utf-8"%>
 <%@ page import="java.util.*"%>
 <%@ page import="com.domain.*"%>
-<%  
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!--这一句是项目url绝对路径（项目改名字的时候不会影响）   -->
+<%-- <%  
 String basePath=request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 
-%>
+%> --%>
+<c:set var="basePath" value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}"></c:set>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,12 +60,12 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 								data-toggle="dropdown">书籍管理<strong class="caret"></strong></a>
 								<ul class="dropdown-menu">
 									<li><a href="#">删除</a></li>
-									<li><a href="addBook.jsp">添加</a></li>
+									<li><a href="${basePath }/addBook.jsp">添加</a></li>
 								</ul></li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li><a href="#">主题&nbsp;&nbsp; <select id="selectTheme"
-									style="color: black;" >
+									style="color: black;">
 										<option>default</option>
 										<option>flatly</option>
 										<option>paper</option>
@@ -68,8 +73,8 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 
 								</select>
 							</a></li>
-							<li><a href="updateUser.jsp">修改密码</a></li>
-							<li><a href="logout">注销</a></li>
+							<li><a href="${basePath }/updateUser.jsp">修改密码</a></li>
+							<li><a href="${basePath }/exit.jsp">注销</a></li>
 						</ul>
 					</div>
 
@@ -84,12 +89,12 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 						<!--搜索框  -->
 						<tr>
 							<td colspan="9">
-								<form class="form-inline" action="bookList" method="post"
+								<form class="form-inline" action="${basePath }/bookList" method="post"
 									id="searchFrm">
 									<div class="form-group" class="col-md-3">
 										<label for="exampleInputName2">书名</label> <input type="text"
 											class="form-control" id="exampleInputName2" name="name"
-											value="<%=request.getAttribute("name")==null?"":request.getAttribute("name") %>">
+											value="${requestScope.name}">
 									</div>
 									<div class="form-group">
 
@@ -99,25 +104,28 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 											<option value="-1">-------请选择----</option>
 
 
-											<% List<bookType> typeLists=(List<bookType>)request.getAttribute("typeList");
-                         			  int tid=(Integer)request.getAttribute("tid");				
-								for(bookType type:typeLists)
-									{
-										
-										if(tid==type.getId())
-										{%>
-											<option value="<%=type.getId()%>" selected="selected"><%=type.getBookType() %></option>
-
-											<%}else{%>
-
-											<option value="<%=type.getId()%>"><%=type.getBookType() %></option>
 
 
 
-											<%}
-									
-									}								
-									%>
+											<c:forEach var="t" items="${requestScope.typeList}">
+
+												<c:choose>
+
+													<c:when test="${requestScope.tid==t.id}">
+
+														<option value="${t.id}" selected="selected">${t.bookType}</option>
+
+													</c:when>
+													<c:otherwise>
+
+														<option value="${t.id}">${t.bookType}</option>
+
+													</c:otherwise>
+
+												</c:choose>
+
+
+											</c:forEach>
 										</select>
 
 
@@ -144,30 +152,42 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 						</tr>
 					</thead>
 
-					<%
-						List<BookList> lists = (List<BookList>) request.getAttribute("bookList");
-						for (BookList list : lists) {
-					%>
-					<tr>
-						<td><%=list.getId()%></td>
-						<td><%=list.getT_name()%></td>
-						<td><%=list.getDescri()%></td>
-						<td><%=list.getBookType()%></td>
-						<!--由tid更换为类型名字  -->
-						<td id="bookImg"><img src="upload/<%=list.getT_photo()%>"
-							style="width: 150px; height: 150px;"></td>
-						<td><%=list.getT_price()%></td>
-						<td><%=list.getT_author()%></td>
-						<td><%=list.getT_date()%></td>
-						<td><a href="editBook?id=<%=list.getId()%>"
-							class="glyphicon glyphicon-pencil">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
-							<a href="deleteBook?id=<%=list.getId()%>"
-							class="glyphicon glyphicon-remove" onclick="delBook(event);">删除</a></td>
 
-					</tr>
-					<%
-						}
-					%>
+					<c:choose>
+						<c:when test="${requestScope.bookList!=null }">
+							<c:forEach var="book" items="${requestScope.bookList }">
+								<tr>
+									<td>${book.id}</td>
+									<td>${book.t_name}</td>
+									<td>${book.descri}</td>
+									<td>${book.bookType}</td>
+									<td><img src="upload/${book.t_photo}"
+										style="width: 150px; height: 150px;"></td>
+									<td>${book.t_price}</td>
+									<td>${book.t_author}</td>
+									<td><a href="${basePath }/editBook?id=${book.id}"
+										class="glyphicon glyphicon-pencil">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="${basePath }/deleteBook?id=${book.id}"
+										class="glyphicon glyphicon-remove" onclick="delBook(event);">删除</a></td>
+
+								</tr>
+							</c:forEach>
+						</c:when>
+						<c:otherwise>
+							<tr>
+								<td colspan="9" style="text-align: center;">无数据</td>
+							</tr>
+
+
+						</c:otherwise>
+
+
+					</c:choose>
+
+
+
+
+
 					<!-- 进行翻页  -->
 					<!-- 向前翻页 -->
 
@@ -178,22 +198,21 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 							<ul class="pagination" style="margin: 0px;">
 								<!-- 向前翻页 -->
 
-								<%
-									int pageNo = (Integer) request.getAttribute("pageNo"); /*括号里面必须是包装类   */
 
-									if (pageNo == 1) {
-								%>
-								<li class="disabled"><a href="#">&lt;&lt;</a></li>
+								<c:choose>
+									<c:when test="${requestScope.pageNo==1 }">
+										<li class="disabled"><a href="#">&lt;&lt;</a></li>
 
-								<%
-									} else {
-								%>
-								<li><a href="bookList?pageNo=<%=pageNo - 1%>">&lt;&lt;</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${basePath }/bookList?pageNo=${requestScope.pageNo-1}">&lt;&lt;</a></li>
+
+									</c:otherwise>
 
 
-								<%
-									}
-								%>
+								</c:choose>
+
+
 
 
 								<!--显示总页数  -->
@@ -204,76 +223,99 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
                          4. 否则显示：1... pageNum-1 pageNum pageNum+1 ...totalPage这五个 -->
 
 
-								<%
-									int totalpage = (Integer) request.getAttribute("totalPage");
-									/*   1. 如果totalPage<=5,我们显⽰所有超级*/
-									if (totalpage <= 5) {
-										for (int i = 1; i <= totalpage; i++) {
-								%>
 
-								<li><a href="bookList?pageNo=<%=i%>"><%=i%></a></li>
-
-								<%
-									}
-									} else {
-										/* 2. 否则如果pageNum<=3 ,显⽰1 2 3 4 ...totalPage这五个超级链接 */
-										if (pageNo <= 3) {
-								%>
-								<li><a href="bookList?pageNo=1">1</a></li>
-								<li><a href="bookList?pageNo=2">2</a></li>
-								<li><a href="bookList?pageNo=3">3</a></li>
-								<li><a href="bookList?pageNo=4">4</a></li>
-								<li><a href="bookList?pageNo=<%=totalpage%>">...<%=totalpage%></a></li>
-								<%
-									}
-										/*  3. 否则如果pageNum>=totalPage-3,显⽰1... totalPage-3 totalPage-2 totalPage-1 totalPage这五个链接 */
-										else if (pageNo >= totalpage - 3) {
-								%>
-
-								<li><a href="bookList?pageNo=1">1...</a></li>
-								<li><a href="bookList?pageNo=<%=totalpage - 3%>"><%=totalpage - 3%></a></li>
-								<li><a href="bookList?pageNo=<%=totalpage - 2%>"><%=totalpage - 2%></a></li>
-								<li><a href="bookList?pageNo=<%=totalpage - 1%>"><%=totalpage - 1%></a></li>
-								<li><a href="bookList?pageNo=<%=totalpage%>"><%=totalpage%></a></li>
+								<c:choose>
+								
+									<c:when test="${requestScope.totalPage<=5}">
+										<c:forEach var="pageBook" end="${requestScope.totalPage}"  
+											begin="1">    <%-- 因为页数为整数，不能用items 应用bagin 和 end 结合 --%>
 
 
-								<%
-									} else {
-											/* 4. 否则显示：1... pageNum-1 pageNum pageNum+1 ...totalPage这五个   */
-								%>
+											<li><a href="${basePath }/bookList?pageNo=${pageBook }">${pageBook }</a></li>
 
-								<li><a href="bookList?pageNo=1">1...</a></li>
-								<li><a href="bookList?pageNo=<%=pageNo - 1%>"><%=pageNo - 1%></a></li>
-								<li><a href="bookList?pageNo=<%=pageNo%>"><%=pageNo%></a></li>
-								<li><a href="bookList?pageNo=<%=totalpage + 1%>"><%=totalpage + 1%></a></li>
-								<li><a href="bookList?pageNo=<%=totalpage%>">...<%=totalpage%></a></li>
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+									
+										<c:choose>
+											<c:when test="${requestScope.pageNo<=3 }">
+												<li><a href="${basePath }/bookList?pageNo=1">1</a></li>
+												<li><a href="${basePath }/bookList?pageNo=2">2</a></li>
+												<li><a href="${basePath }/bookList?pageNo=3">3</a></li>
+												<li><a href="${basePath }/bookList?pageNo=4">4</a></li>
+												<li><a href="${basePath }/bookList?pageNo=${requestScope.totalPage}">...${requestScope.totalPage}</a></li>
 
 
 
 
-								<%
-									}
+											</c:when>
+										
+											<c:when
+												test="${requestScope.pageNo>=requestScope.totalPage-3 }">
 
-									}
-								%>
+												<li><a href="bookList?pageNo=1">1...</a></li>
+												<li><a
+													href="${basePath }/bookList?pageNo=${requestScope.totalPage-3 }">${requestScope.totalPage-3 }</a></li>
+												<li><a
+													href="${basePath }/bookList?pageNo=${requestScope.totalPage-2 }">${requestScope.totalPage-2 }</a></li>
+												<li><a
+													href="${basePath }/bookList?pageNo=${requestScope.totalPage-1 }">${requestScope.totalPage-1 }</a></li>
+												<li><a
+													href="${basePath }/bookList?pageNo=${requestScope.totalPage }">${requestScope.totalPage }</a></li>
+
+
+
+
+											</c:when>
+											<c:otherwise>
+
+												<li><a href="${basePath }/bookList?pageNo=1">1...</a></li>
+												<li><a href="${basePath }/bookList?pageNo=${requestScope.pageNo-1 }">${requestScope.pageNo-1 }</a></li>
+												<li><a href="${basePath }/bookList?pageNo=${requestScope.pageNo }">${requestScope.pageNo }</a></li>
+												<li><a href="${basePath }/bookList?pageNo=${requestScope.pageNo+1 }">${requestScope.pageNo+1 }</a></li>
+												<li><a
+													href="${basePath }/bookList?pageNo=${requestScope.totalPage }">...${requestScope.totalPage }</a></li>
+
+
+
+
+
+											</c:otherwise>
+
+
+										</c:choose>
+
+
+
+									</c:otherwise>
+
+
+								</c:choose>
+
+
+
 
 
 
 								<!-- 向后翻页 -->
-								<%
-									if (pageNo == totalpage) {
-								%>
-								<li class="disabled"><a href="#">&gt;&gt;</a></li>
-
-								<%
-									} else {
-								%>
-								<li><a href="bookList?pageNo=<%=pageNo + 1%>">&gt;&gt;</a></li>
 
 
-								<%
-									}
-								%>
+								<c:choose>
+									<c:when test="${requestScope.pageNo==requestScope.totalPage}">
+
+										<li class="disabled"><a href="#">&gt;&gt;</a></li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="${basePath }/bookList?pageNo=${requestScope.pageNo+1 }">&gt;&gt;</a></li>
+									</c:otherwise>
+
+
+
+								</c:choose>
+
+
+
+
 							</ul>
 						</td>
 					</tr>
@@ -285,8 +327,9 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 		<div class="row">
 			<!-- 尾部提取代码 -->
 			<%
-		out.flush();    /* 先进行发送缓存----避免代码位置不对  */
-		request.getRequestDispatcher("bottom.jsp").include(request, response); %>
+				out.flush(); /* 先进行发送缓存----避免代码位置不对  */
+				request.getRequestDispatcher("bottom.jsp").include(request, response);
+			%>
 		</div>
 	</div>
 
@@ -294,18 +337,15 @@ request.getRequestDispatcher("top.jsp").include(request, response); %>
 
     $(function(){
            /* 改变 当前页样式  */
-            $("a[ href^='bookList?pageNo=<%=pageNo%>'] ").parent("li").addClass("active");
+            $("a[ href^='${basePath }/bookList?pageNo=${requestScope.pageNo}'] ").parent("li").addClass("active");
 
 			/* 序列化表单  */
-            $(".pagination a[ href^='bookList?pageNo=']").click(function(e){
+			$(".pagination a[ href^='${basePath }/bookList?pageNo=']").click(function(e) {
 
-                this.href+="&"+$("#searchFrm").serialize();
+				this.href += "&" + $("#searchFrm").serialize();
 
+			});
 
-                });
-
-         
-			
 		});
 	</script>
 	<!--解决图片丢失问题，如果丢失添加一个默认图片  -->
